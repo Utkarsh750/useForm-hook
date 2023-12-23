@@ -5,6 +5,8 @@ import { formValues } from "./types/types";
 let renderCount = 0;
 
 const YoutubeForm = () => {
+  console.log(renderCount, "renderCount is here");
+
   const form = useForm<formValues>({
     defaultValues: {
       username: "Utkarsh Sharma",
