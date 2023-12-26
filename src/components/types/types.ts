@@ -7,4 +7,9 @@ export type formValues = {
         twitter : string;
     }
     phoneNumbers: string[]
+    phNumbers: {
+        number: string;
+    }[];
+    age: number;
+    dob: Date;
   };

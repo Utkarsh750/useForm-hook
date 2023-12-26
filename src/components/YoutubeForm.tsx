@@ -1,6 +1,7 @@
-import { useForm } from "react-hook-form";
+import { FieldArray, useFieldArray, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { formValues } from "./types/types";
+import { useEffect } from "react";
 
 let renderCount = 0;
 
@@ -17,18 +18,65 @@ const YoutubeForm = () => {
         twitter: "",
       },
       phoneNumbers: [" ", " "],
+      phNumbers: [{ number: "" }],
+      age: 0,
+      dob: new Date(),
     },
   });
-  const { register, control, handleSubmit, formState } = form;
-  const { errors } = formState;
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState,
+    getValues,
+    setValue,
+    reset,
+  } = form;
+  const {
+    errors,
+    isDirty,
+    isValid,
+    isSubmitting,
+    isSubmitted,
+    submitCount,
+    isSubmitSuccessful,
+  } = formState;
+  // console.log(isDirty, isValid, "isDirty, isValid");
+  console.log({ isSubmitting, isSubmitted, submitCount }); //default - {false} on formSubmission it will be false again on formSubmit it will be true,
 
+  const { fields, append, remove } = useFieldArray({
+    name: "phNumbers",
+    control,
+  });
   const onSubmit = (data: formValues) => {
     console.log("form data", data);
   };
+
+  const onError = (errors: FieldArray<formValues>) => {
+    console.log("Form erros", errors);
+  };
+  const handleGetValues = () => {
+    console.log("getvalue", getValues(["username", "channel"]));
+  };
+
+  const handleSetValue = () => {
+    setValue("username", "megaYT");
+    // setValue("username", "megaYT", {
+    //   shouldDirty: true,
+    //   shouldTouch: true,
+    //   shouldValidate: true,
+    // });
+  };
+
+  // useEffect(() => {
+  //   if (isSubmitSuccessful) {
+  //     reset();
+  //   }
+  // }, [isSubmitSuccessful, reset]);
   return (
     <div>
       <h1>Dummy Form({renderCount / 2})</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit, onError)} noValidate>
         <div className="form-control">
           <label htmlFor="username">Username</label>
           <input
@@ -112,7 +160,70 @@ const YoutubeForm = () => {
             {...register("phoneNumbers.1")}
           />
         </div>
-        <button>Submit</button>
+
+        <div>
+          <label>List of phone numbers</label>
+          <div>
+            {fields.map((field, index) => (
+              <div className="form-control" key={field.id}>
+                <input
+                  type="text"
+                  {...register(`phNumbers.${index}.number` as const)}
+                />
+                {index > 0 && (
+                  <button type="button" onClick={() => remove(index)}>
+                    Remove Numbers
+                  </button>
+                )}
+              </div>
+            ))}
+            <button type="button" onClick={() => append({ number: "" })}>
+              Add Phone numbers
+            </button>
+          </div>
+        </div>
+
+        <div className="form-control">
+          <label htmlFor="age">age</label>
+          <input
+            type="number"
+            id="age"
+            {...register("age", {
+              valueAsNumber: true,
+              required: {
+                value: true,
+                message: "age is required",
+              },
+            })}
+          />
+          <p className="error">{errors.age?.message}</p>
+        </div>
+
+        <div className="form-control">
+          <label htmlFor="dob">Date of Birth</label>
+          <input
+            type="date"
+            id="dob"
+            {...register("dob", {
+              valueAsDate: true,
+              required: {
+                value: true,
+                message: "Date of birth is required",
+              },
+            })}
+          />
+          <p className="error">{errors.dob?.message}</p>
+        </div>
+        <button disabled={!isDirty || !isValid}>Submit</button>
+        <button type="button" onClick={() => reset()}>
+          Reset
+        </button>
+        <button type="button" onClick={handleGetValues}>
+          Get Values
+        </button>
+        <button type="button" onClick={handleSetValue}>
+          Set Value
+        </button>
       </form>
       <DevTool control={control} />
     </div>
