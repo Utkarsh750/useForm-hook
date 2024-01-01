@@ -37,3 +37,13 @@ input[type="date"] {
 .form-control {
   margin-bottom: 20px;
 }
+.new_form{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 200px;
+  height: 100vh;
+}
+span{
+  color: red;
+}

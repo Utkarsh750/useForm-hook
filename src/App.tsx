@@ -1,10 +1,12 @@
 import "./App.css";
+import NewForm from "./components/NewForm";
 import YoutubeForm from "./components/YoutubeForm";
 
 function App() {
   return (
     <div>
-      <YoutubeForm />
+      {/* <YoutubeForm /> */}
+      <NewForm />
     </div>
   );
 }

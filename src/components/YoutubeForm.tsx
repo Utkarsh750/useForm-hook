@@ -76,7 +76,7 @@ const YoutubeForm = () => {
   return (
     <div>
       <h1>Dummy Form({renderCount / 2})</h1>
-      <form onSubmit={handleSubmit(onSubmit, onError)} noValidate>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="form-control">
           <label htmlFor="username">Username</label>
           <input
