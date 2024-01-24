@@ -22,3 +22,8 @@ export type formValues = {
     password: string;
     confirmPassword: string;
   }
+
+  export type InputFields = {
+    email: string;
+    password: string
+  }
